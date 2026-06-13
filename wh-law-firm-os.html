@@ -6,20 +6,24 @@
 <title>⚖️ WH Law Firm OS｜律師工作系統</title>
 <style>
   :root {
-    --bg: #fdf6f0;
+    --bg: #f5eefa;
     --surface: #ffffff;
-    --surface2: #fef3fb;
-    --border: #e8d5f0;
-    --accent: #b48ee0;
-    --accent2: #e8a0c8;
-    --text: #3d2c5e;
-    --text-muted: #9b7ec0;
-    --red: #e07a9a;
-    --orange: #e8a060;
-    --yellow: #d4a843;
-    --green: #6dbf8a;
-    --blue: #7ab0e0;
-    --purple: #b48ee0;
+    --surface2: #fdf0f8;
+    --border: #d8bff0;
+    --accent: #8a5dc8;
+    --accent2: #d07ab8;
+    --text: #2c1a50;
+    --text-muted: #7a5a9a;
+    --red: #c0456a;
+    --orange: #c06828;
+    --yellow: #9a6800;
+    --green: #2a8050;
+    --blue: #2a68a8;
+    --purple: #8a5dc8;
+    /* pastel surface tints */
+    --tint-purple: #f0e6fa;
+    --tint-blue: #e6f0fa;
+    --tint-yellow: #faf5e0;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
@@ -32,7 +36,7 @@
   .logo p { font-size:11px; color:var(--text-muted); margin-top:2px; }
   .nav-item { display:flex; align-items:center; gap:10px; padding:9px 20px; cursor:pointer; font-size:13px; color:var(--text-muted); transition:all .15s; border-left:3px solid transparent; }
   .nav-item:hover { background:var(--surface2); color:var(--text); }
-  .nav-item.active { background:var(--surface2); color:var(--accent); border-left-color:var(--accent); }
+  .nav-item.active { background:var(--tint-purple); color:var(--accent); border-left-color:var(--accent); font-weight:600; }
   .nav-item .icon { width:16px; text-align:center; }
   .nav-section { font-size:10px; color:var(--text-muted); padding:16px 20px 4px; text-transform:uppercase; letter-spacing:.08em; }
 
@@ -46,8 +50,8 @@
   .page-header p { color:var(--text-muted); font-size:13px; margin-top:4px; }
 
   /* Cards */
-  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; }
-  .card-title { font-size:12px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; box-shadow:0 1px 6px rgba(138,93,200,.08); }
+  .card-title { font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; }
 
   /* Grid */
   .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -55,34 +59,34 @@
   .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
 
   /* Stat cards */
-  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; }
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; box-shadow:0 1px 6px rgba(138,93,200,.08); }
   .stat-num { font-size:28px; font-weight:700; }
   .stat-label { font-size:12px; color:var(--text-muted); margin-top:2px; }
 
   /* Buttons */
   .btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:7px; border:none; cursor:pointer; font-size:13px; font-weight:500; transition:all .15s; }
-  .btn-primary { background:var(--accent); color:#fff; }
-  .btn-primary:hover { background:#9a72d0; }
-  .btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border); }
-  .btn-ghost:hover { background:var(--surface2); color:var(--text); }
-  .btn-danger { background:#fde8ef; color:#c0607a; border:1px solid #f0b8cb; }
-  .btn-danger:hover { background:#fbd5e3; }
+  .btn-primary { background:var(--accent); color:#fff; font-weight:600; box-shadow:0 2px 8px rgba(138,93,200,.25); }
+  .btn-primary:hover { background:#7448b8; }
+  .btn-ghost { background:var(--surface); color:var(--text); border:1px solid var(--border); }
+  .btn-ghost:hover { background:var(--tint-purple); border-color:var(--accent); color:var(--accent); }
+  .btn-danger { background:#fde0ea; color:#a0284a; border:1px solid #e8a0b8; font-weight:600; }
+  .btn-danger:hover { background:#fbc8da; }
   .btn-sm { padding:4px 10px; font-size:12px; }
 
   /* Badges */
-  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:600; }
-  .badge-red { background:#fde8ef; color:#c0607a; }
-  .badge-orange { background:#fdf0e0; color:#b87030; }
-  .badge-yellow { background:#fef9e0; color:#9a7520; }
-  .badge-green { background:#e5f7ed; color:#3a8a58; }
-  .badge-blue { background:#e0eef9; color:#3a70a8; }
-  .badge-purple { background:#f0e8f9; color:#7a48b0; }
-  .badge-gray { background:#f0ece8; color:#8a7a70; }
+  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:700; }
+  .badge-red { background:#fde0ea; color:#a0284a; border:1px solid #f0b0c8; }
+  .badge-orange { background:#fdebd8; color:#8a4010; border:1px solid #f0c090; }
+  .badge-yellow { background:#fdf5d0; color:#7a5000; border:1px solid #e8d080; }
+  .badge-green { background:#d8f0e4; color:#1a6040; border:1px solid #90d8b0; }
+  .badge-blue { background:#d8eaf8; color:#1a4880; border:1px solid #90c0e8; }
+  .badge-purple { background:#ecddf8; color:#5a2890; border:1px solid #c098e8; }
+  .badge-gray { background:#ece8f0; color:#5a4870; border:1px solid #c0b0d8; }
 
   /* Table */
   .table-wrap { overflow-x:auto; }
   table { width:100%; border-collapse:collapse; font-size:13px; }
-  th { text-align:left; padding:8px 12px; font-size:11px; color:var(--text-muted); font-weight:600; border-bottom:1px solid var(--border); white-space:nowrap; }
+  th { text-align:left; padding:8px 12px; font-size:11px; color:var(--text); font-weight:700; border-bottom:2px solid var(--border); white-space:nowrap; background:var(--tint-purple); }
   td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
   tr:last-child td { border-bottom:none; }
   tr:hover td { background:var(--surface2); }
@@ -136,7 +140,7 @@
   .progress-fill { height:100%; border-radius:2px; background:var(--accent); transition:width .3s; }
 
   /* Quick today panel */
-  .today-panel { background:linear-gradient(135deg, #f3e8fc 0%, #e8f0fc 50%, #fdf3e8 100%); border:1px solid #dcc8f0; border-radius:12px; padding:20px; margin-bottom:20px; }
+  .today-panel { background:linear-gradient(135deg, #e8d8f8 0%, #d8e8f8 50%, #f8f0d8 100%); border:1px solid #c8a8e8; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 12px rgba(138,93,200,.12); }
   .today-date { font-size:12px; color:var(--text-muted); margin-bottom:4px; }
   .today-title { font-size:20px; font-weight:700; margin-bottom:16px; }
 
@@ -158,8 +162,9 @@
 
   /* Filter pills */
   .filter-pills { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
-  .pill { padding:5px 12px; border-radius:99px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text-muted); background:var(--surface2); transition:all .15s; }
-  .pill.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .pill { padding:5px 12px; border-radius:99px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text); background:var(--surface); transition:all .15s; font-weight:500; }
+  .pill:hover { border-color:var(--accent); color:var(--accent); background:var(--tint-purple); }
+  .pill.active { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:700; }
 
   select option { background:var(--surface2); }
 </style>
@@ -357,25 +362,86 @@
   <div id="page-judiciary" class="page">
     <div class="page-header">
       <h1>🔍 司法院資料查詢</h1>
-      <p>快速連結至司法院公開系統</p>
+      <p>電子訴訟平台、裁判書查詢、法規資源一站整合</p>
     </div>
+
+    <!-- 電子訴訟平台主入口 -->
+    <div style="background:linear-gradient(120deg,#e8d8f8 0%,#d8e8f8 100%);border:2px solid #b088d8;border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 4px 16px rgba(138,93,200,.15)">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">司法院官方平台</div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:6px">⚖️ 電子訴訟文書服務平台</div>
+        <div style="font-size:13px;color:var(--text-muted);line-height:1.6">線上起訴、提交書狀、閱卷申請、卷證上傳、案件進度查詢<br>
+        支援：民事 · 民事執行 · 商業 · 智慧民事/行政 · 行政訴訟 · 憲法訴訟</div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-blue">登入需自然人憑證</span>
+          <span class="badge badge-purple">支援律師執業憑證</span>
+          <span class="badge badge-green">建議 Chrome / Edge</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;gap:10px">
+        <a href="https://efiling.judicial.gov.tw/jud/jss/t1/Index.init.ctr?openExternalBrowser=1" target="_blank" class="btn btn-primary" style="text-decoration:none;font-size:14px;padding:10px 22px">🚀 開啟電子訴訟平台</a>
+        <button class="btn btn-ghost" onclick="showEfilingFeatures()" style="font-size:12px">📋 查看功能說明</button>
+      </div>
+    </div>
+
+    <!-- 電子訴訟功能說明（可展開） -->
+    <div id="efiling-features" style="display:none;margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">📋 電子訴訟文書服務平台 — 功能說明</div>
+        <div class="grid-3" style="gap:12px">
+          <div style="background:var(--tint-purple);border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:var(--accent);margin-bottom:8px">📤 提交服務</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 線上起訴</li>
+              <li>✦ 電子書狀上傳</li>
+              <li>✦ 電子卷證複製申請</li>
+              <li>✦ 集中報到</li>
+            </ul>
+          </div>
+          <div style="background:var(--tint-blue);border:1px solid #b0c8e8;border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:8px">🔎 查詢服務</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 案件進度查詢</li>
+              <li>✦ 開庭進度查詢</li>
+              <li>✦ 筆錄調閱</li>
+              <li>✦ 聲請閱卷</li>
+            </ul>
+          </div>
+          <div style="background:var(--tint-yellow);border:1px solid #d8c080;border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:var(--yellow);margin-bottom:8px">⚠️ 注意事項</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 需自然人憑證登入</li>
+              <li>✦ 解析度建議 1920×1080</li>
+              <li>✦ 家事/刑事附民尚未開放</li>
+              <li>✦ 密碼需含大小寫+數字+符號</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="grid-2" style="margin-bottom:20px">
       <div class="card">
         <div class="card-title">⚖️ 裁判書查詢</div>
         <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">法院裁判書全文資料庫（公開資料）</p>
         <div class="form-row">
           <label>關鍵字搜尋</label>
-          <input type="text" id="jud-keyword" placeholder="輸入案號或關鍵字..." oninput="judSearch()">
+          <input type="text" id="jud-keyword" placeholder="輸入案號或關鍵字...">
         </div>
         <div class="form-row">
           <label>法院</label>
-          <select id="jud-court" onchange="judSearch()">
+          <select id="jud-court">
             <option value="">全部法院</option>
             <option value="TPS">最高法院</option>
             <option value="TPH">臺灣高等法院</option>
             <option value="TPC">臺灣臺北地方法院</option>
             <option value="SLD">臺灣新北地方法院</option>
             <option value="TPD">臺灣桃園地方法院</option>
+            <option value="KLD">臺灣基隆地方法院</option>
+            <option value="ILD">臺灣宜蘭地方法院</option>
+            <option value="HLD">臺灣花蓮地方法院</option>
+            <option value="TND">臺灣臺南地方法院</option>
+            <option value="KSD">臺灣高雄地方法院</option>
           </select>
         </div>
         <div class="form-row">
@@ -385,28 +451,44 @@
             <option value="V">民事</option>
             <option value="C">刑事</option>
             <option value="A">行政</option>
+            <option value="L">勞動</option>
           </select>
         </div>
         <div style="display:flex;gap:10px">
           <button class="btn btn-primary" onclick="openJudSearch()">🔍 查詢裁判書</button>
-          <button class="btn btn-ghost" onclick="window.open('https://judgment.judicial.gov.tw/FJUD/default.aspx','_blank')">開啟查詢系統</button>
+          <button class="btn btn-ghost" onclick="window.open('https://judgment.judicial.gov.tw/FJUD/default.aspx','_blank')">開啟系統 ↗</button>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">📋 快速連結</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" class="btn btn-ghost" style="text-decoration:none">⚖️ 司法院裁判書查詢</a>
-          <a href="https://www.judicial.gov.tw/tw/lp-1888-1.html" target="_blank" class="btn btn-ghost" style="text-decoration:none">📜 法規資料庫</a>
-          <a href="https://lis.ly.gov.tw/lglawc/lawsingle" target="_blank" class="btn btn-ghost" style="text-decoration:none">📖 立法院法律系統</a>
-          <a href="https://mojlaw.moj.gov.tw/" target="_blank" class="btn btn-ghost" style="text-decoration:none">🏛️ 法務部法規查詢</a>
-          <a href="https://www.judicial.gov.tw/tw/dl-63591-90dda2a4c49d46409f2b18a06e1fee6b.html" target="_blank" class="btn btn-ghost" style="text-decoration:none">🗓️ 法院開庭查詢</a>
+        <div class="card-title">📋 司法院快速連結</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://efiling.judicial.gov.tw/jud/jss/t1/Index.init.ctr?openExternalBrowser=1" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-purple);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+            <span style="font-size:18px">🖥️</span>
+            <div><div>電子訴訟文書服務平台</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">線上起訴、書狀提交、閱卷申請</div></div>
+          </a>
+          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-blue);border:1px solid #b0c8e8;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">⚖️</span>
+            <div><div>裁判書查詢系統</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">全文資料庫，公開裁判書</div></div>
+          </a>
+          <a href="https://www.judicial.gov.tw/tw/lp-1888-1.html" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-yellow);border:1px solid #d8c080;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">📜</span>
+            <div><div>司法院法規資料庫</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">法律、施行細則、判例</div></div>
+          </a>
+          <a href="https://lis.ly.gov.tw/lglawc/lawsingle" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0f8f0;border:1px solid #90d8b0;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">📖</span>
+            <div><div>立法院法律系統</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">法案查詢、歷史版本</div></div>
+          </a>
+          <a href="https://mojlaw.moj.gov.tw/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">🏛️</span>
+            <div><div>法務部法規查詢</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">行政規則、函釋</div></div>
+          </a>
         </div>
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">🔎 判決檢索工具（案件連結）</div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">選擇案件，快速跳轉至司法院裁判書查詢</p>
+      <div class="card-title">🔎 依案件快速跳轉裁判書查詢</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">點選案件名稱，直接以案件關鍵字搜尋司法院裁判書</p>
       <div id="matter-judgment-links"></div>
     </div>
   </div>
@@ -1052,7 +1134,12 @@ function openJudSearch() {
   window.open(url, '_blank');
 }
 
-function judSearch() {} // live — could add autocomplete later
+function judSearch() {}
+
+function showEfilingFeatures() {
+  const el = document.getElementById('efiling-features');
+  if (el) { el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+}
 
 // ============================================================
 // KNOWLEDGE
