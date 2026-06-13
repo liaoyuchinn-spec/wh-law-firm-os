@@ -6,20 +6,20 @@
 <title>⚖️ WH Law Firm OS｜律師工作系統</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --border: #2e3250;
-    --accent: #4f6ef7;
-    --accent2: #7c3aed;
-    --text: #e2e8f0;
-    --text-muted: #8892b0;
-    --red: #ef4444;
-    --orange: #f97316;
-    --yellow: #eab308;
-    --green: #22c55e;
-    --blue: #3b82f6;
-    --purple: #a855f7;
+    --bg: #fdf6f0;
+    --surface: #ffffff;
+    --surface2: #fef3fb;
+    --border: #e8d5f0;
+    --accent: #b48ee0;
+    --accent2: #e8a0c8;
+    --text: #3d2c5e;
+    --text-muted: #9b7ec0;
+    --red: #e07a9a;
+    --orange: #e8a060;
+    --yellow: #d4a843;
+    --green: #6dbf8a;
+    --blue: #7ab0e0;
+    --purple: #b48ee0;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
@@ -62,22 +62,22 @@
   /* Buttons */
   .btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:7px; border:none; cursor:pointer; font-size:13px; font-weight:500; transition:all .15s; }
   .btn-primary { background:var(--accent); color:#fff; }
-  .btn-primary:hover { background:#3a5ce5; }
+  .btn-primary:hover { background:#9a72d0; }
   .btn-ghost { background:transparent; color:var(--text-muted); border:1px solid var(--border); }
   .btn-ghost:hover { background:var(--surface2); color:var(--text); }
-  .btn-danger { background:#7f1d1d; color:#fca5a5; border:1px solid #b91c1c; }
-  .btn-danger:hover { background:#991b1b; }
+  .btn-danger { background:#fde8ef; color:#c0607a; border:1px solid #f0b8cb; }
+  .btn-danger:hover { background:#fbd5e3; }
   .btn-sm { padding:4px 10px; font-size:12px; }
 
   /* Badges */
   .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:99px; font-size:11px; font-weight:600; }
-  .badge-red { background:#450a0a; color:#f87171; }
-  .badge-orange { background:#431407; color:#fb923c; }
-  .badge-yellow { background:#422006; color:#fbbf24; }
-  .badge-green { background:#052e16; color:#4ade80; }
-  .badge-blue { background:#172554; color:#60a5fa; }
-  .badge-purple { background:#2e1065; color:#c084fc; }
-  .badge-gray { background:#1c1917; color:#a8a29e; }
+  .badge-red { background:#fde8ef; color:#c0607a; }
+  .badge-orange { background:#fdf0e0; color:#b87030; }
+  .badge-yellow { background:#fef9e0; color:#9a7520; }
+  .badge-green { background:#e5f7ed; color:#3a8a58; }
+  .badge-blue { background:#e0eef9; color:#3a70a8; }
+  .badge-purple { background:#f0e8f9; color:#7a48b0; }
+  .badge-gray { background:#f0ece8; color:#8a7a70; }
 
   /* Table */
   .table-wrap { overflow-x:auto; }
@@ -112,7 +112,7 @@
   .dot-blue { background:var(--blue); } .dot-gray { background:var(--text-muted); }
 
   /* Modal */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:1000; align-items:center; justify-content:center; }
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(100,60,160,.25); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; }
   .modal-overlay.open { display:flex; }
   .modal { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; width:580px; max-width:95vw; max-height:90vh; overflow-y:auto; }
   .modal h3 { font-size:17px; font-weight:700; margin-bottom:20px; }
@@ -136,7 +136,7 @@
   .progress-fill { height:100%; border-radius:2px; background:var(--accent); transition:width .3s; }
 
   /* Quick today panel */
-  .today-panel { background:linear-gradient(135deg, #1e2445 0%, #1a1d27 100%); border:1px solid #3a4070; border-radius:12px; padding:20px; margin-bottom:20px; }
+  .today-panel { background:linear-gradient(135deg, #f3e8fc 0%, #e8f0fc 50%, #fdf3e8 100%); border:1px solid #dcc8f0; border-radius:12px; padding:20px; margin-bottom:20px; }
   .today-date { font-size:12px; color:var(--text-muted); margin-bottom:4px; }
   .today-title { font-size:20px; font-weight:700; margin-bottom:16px; }
 
@@ -151,7 +151,7 @@
   ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
 
   /* Toast */
-  #toast { position:fixed; bottom:24px; right:24px; background:#1e293b; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:13px; z-index:9999; display:none; box-shadow:0 8px 24px rgba(0,0,0,.4); }
+  #toast { position:fixed; bottom:24px; right:24px; background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px 18px; font-size:13px; z-index:9999; display:none; box-shadow:0 8px 24px rgba(180,142,224,.2); color:var(--text); }
 
   /* Notification badge */
   .nav-badge { background:var(--red); color:#fff; font-size:10px; font-weight:700; border-radius:99px; padding:1px 6px; margin-left:auto; }
