@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚖️ WH Law Firm OS｜律師工作系統（藍金版）</title>
+<style>
+  :root {
+    --bg: #eef4fb;
+    --surface: #ffffff;
+    --surface2: #f0f5fc;
+    --border: #b8d0e8;
+    --accent: #c8a020;        /* 金色主調 */
+    --accent2: #2a6aaa;       /* 藍色輔調 */
+    --text: #1a2a3a;
+    --text-muted: #5a7a96;
+    --red: #b83030;
+    --orange: #c06020;
+    --yellow: #9a7800;
+    --green: #1e7848;
+    --blue: #1e58a0;
+    --purple: #5a48a0;
+    /* tints */
+    --tint-blue: #ddeaf8;
+    --tint-gold: #faf2d8;
+    --tint-gray: #f0f4f8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Segoe UI',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+  /* Layout */
+  .sidebar { position:fixed; left:0; top:0; bottom:0; width:220px; background:#1a2a3a; border-right:none; padding:20px 0; z-index:100; box-shadow:2px 0 12px rgba(26,42,58,.18); }
+  .main { margin-left:220px; padding:24px; min-height:100vh; }
+  .logo { padding:0 20px 20px; border-bottom:1px solid rgba(200,160,32,.4); margin-bottom:12px; }
+  .logo h2 { font-size:14px; color:#f0e8c0; }
+  .logo p { font-size:11px; color:#7a9ab8; margin-top:2px; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:9px 20px; cursor:pointer; font-size:13px; color:#9ab8d0; transition:all .15s; border-left:3px solid transparent; }
+  .nav-item:hover { background:rgba(255,255,255,.07); color:#e8f0f8; }
+  .nav-item.active { background:rgba(200,160,32,.15); color:#e8c840; border-left-color:#c8a020; font-weight:600; }
+  .nav-item .icon { width:16px; text-align:center; }
+  .nav-section { font-size:10px; color:#4a6a88; padding:16px 20px 4px; text-transform:uppercase; letter-spacing:.08em; }
+
+  /* Tabs/Pages */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* Header */
+  .page-header { margin-bottom:24px; }
+  .page-header h1 { font-size:22px; font-weight:700; }
+  .page-header p { color:var(--text-muted); font-size:13px; margin-top:4px; }
+
+  /* Cards */
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:18px; box-shadow:0 1px 8px rgba(26,90,160,.08); }
+  .card-title { font-size:12px; font-weight:700; color:var(--accent2); text-transform:uppercase; letter-spacing:.08em; margin-bottom:12px; border-left:3px solid var(--accent); padding-left:8px; }
+
+  /* Grid */
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+
+  /* Stat cards */
+  .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 18px; box-shadow:0 1px 8px rgba(26,90,160,.08); border-top:3px solid var(--accent); }
+  .stat-num { font-size:28px; font-weight:700; }
+  .stat-label { font-size:12px; color:var(--text-muted); margin-top:2px; }
+
+  /* Buttons */
+  .btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:7px; border:none; cursor:pointer; font-size:13px; font-weight:500; transition:all .15s; }
+  .btn-primary { background:var(--accent); color:#1a1a00; font-weight:700; box-shadow:0 2px 8px rgba(200,160,32,.35); }
+  .btn-primary:hover { background:#b89010; }
+  .btn-ghost { background:var(--surface); color:var(--text); border:1px solid var(--border); }
+  .btn-ghost:hover { background:var(--tint-blue); border-color:var(--accent2); color:var(--accent2); }
+  .btn-danger { background:#fff0f0; color:#903020; border:1px solid #e0a8a0; font-weight:600; }
+  .btn-danger:hover { background:#ffe0d8; }
+  .btn-sm { padding:4px 10px; font-size:12px; }
+
+  /* Badges */
+  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; }
+  .badge-red { background:#fff0ee; color:#903020; border:1px solid #e8b0a0; }
+  .badge-orange { background:#fff5e8; color:#804818; border:1px solid #e8c888; }
+  .badge-yellow { background:var(--tint-gold); color:#7a5800; border:1px solid #d8c060; }
+  .badge-green { background:#e8f8ee; color:#1a6038; border:1px solid #80d0a0; }
+  .badge-blue { background:var(--tint-blue); color:#1a4890; border:1px solid #88b8e0; }
+  .badge-purple { background:#f0eef8; color:#483890; border:1px solid #b0a0d8; }
+  .badge-gray { background:var(--tint-gray); color:#385060; border:1px solid #a0b8c8; }
+
+  /* Table */
+  .table-wrap { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; padding:9px 12px; font-size:11px; color:#1a2a3a; font-weight:700; border-bottom:2px solid var(--accent); white-space:nowrap; background:var(--tint-blue); }
+  td { padding:10px 12px; border-bottom:1px solid #d8e8f4; vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:var(--tint-gold); }
+
+  /* Checklist */
+  .check-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .check-item:last-child { border-bottom:none; }
+  .check-item input[type=checkbox] { margin-top:2px; accent-color:var(--accent); cursor:pointer; }
+  .check-item label { font-size:13px; cursor:pointer; flex:1; }
+  .check-item.done label { text-decoration:line-through; color:var(--text-muted); }
+
+  /* Kanban */
+  .kanban { display:flex; gap:14px; overflow-x:auto; padding-bottom:12px; }
+  .kanban-col { min-width:240px; flex:1; background:var(--tint-gray); border-radius:10px; padding:14px; border:1px solid var(--border); }
+  .kanban-col-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; color:var(--text); }
+  .kanban-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; }
+  .kanban-card:hover { border-color:var(--accent); box-shadow:0 2px 8px rgba(200,160,32,.2); }
+  .kanban-card-title { font-size:13px; font-weight:600; margin-bottom:6px; }
+  .kanban-card-meta { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .kanban-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 7px; border-radius:4px; font-size:11px; font-weight:500; }
+
+  /* Priority colors */
+  .p0 { color:var(--red); } .p1 { color:var(--orange); } .p2 { color:var(--yellow); } .p3 { color:var(--text-muted); }
+  .dot { width:7px; height:7px; border-radius:50%; display:inline-block; }
+  .dot-red { background:var(--red); } .dot-orange { background:var(--orange); }
+  .dot-yellow { background:#c8a020; } .dot-green { background:var(--green); }
+  .dot-blue { background:var(--blue); } .dot-gray { background:var(--text-muted); }
+
+  /* Modal */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,42,58,.45); backdrop-filter:blur(4px); z-index:1000; align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border); border-top:3px solid var(--accent); border-radius:14px; padding:28px; width:580px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(26,42,58,.3); }
+  .modal h3 { font-size:17px; font-weight:700; margin-bottom:20px; color:var(--text); }
+  .form-row { margin-bottom:14px; }
+  .form-row label { display:block; font-size:12px; color:var(--text-muted); margin-bottom:5px; font-weight:600; }
+  .form-row input, .form-row select, .form-row textarea { width:100%; background:var(--tint-gray); border:1px solid var(--border); border-radius:7px; padding:8px 12px; color:var(--text); font-size:13px; outline:none; }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(200,160,32,.15); }
+  .form-row textarea { resize:vertical; min-height:80px; }
+  .modal-footer { display:flex; gap:10px; justify-content:flex-end; margin-top:20px; border-top:1px solid var(--border); padding-top:16px; }
+
+  /* Timeline */
+  .timeline-item { display:flex; gap:14px; padding:10px 0; border-bottom:1px solid var(--border); }
+  .timeline-item:last-child { border-bottom:none; }
+  .timeline-dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+  .timeline-content { flex:1; }
+  .timeline-title { font-size:13px; font-weight:500; }
+  .timeline-meta { font-size:12px; color:var(--text-muted); margin-top:2px; }
+
+  /* Progress bar */
+  .progress-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; margin-top:6px; }
+  .progress-fill { height:100%; border-radius:2px; background:var(--accent); transition:width .3s; }
+
+  /* Quick today panel */
+  .today-panel { background:linear-gradient(135deg, #1a2a3a 0%, #1e3a58 60%, #243050 100%); border:1px solid #c8a020; border-radius:12px; padding:22px; margin-bottom:20px; box-shadow:0 4px 20px rgba(26,42,58,.2); }
+  .today-date { font-size:12px; color:#7aaac8; margin-bottom:4px; }
+  .today-title { font-size:20px; font-weight:700; margin-bottom:16px; color:#f0e8c0; }
+  .today-panel .check-item { border-bottom-color:rgba(255,255,255,.1); }
+  .today-panel .check-item label { color:#d8e8f8; }
+  .today-panel .check-item.done label { color:#5a7a96; }
+
+  /* Search */
+  .search-bar { display:flex; gap:10px; margin-bottom:16px; }
+  .search-input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:7px; padding:8px 12px; color:var(--text); font-size:13px; outline:none; }
+  .search-input:focus { border-color:var(--accent); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-track { background:transparent; }
+  ::-webkit-scrollbar-thumb { background:#b0c8e0; border-radius:3px; }
+
+  /* Toast */
+  #toast { position:fixed; bottom:24px; right:24px; background:#1a2a3a; border:1px solid #c8a020; border-radius:8px; padding:12px 18px; font-size:13px; z-index:9999; display:none; box-shadow:0 8px 24px rgba(26,42,58,.4); color:#f0e8c0; }
+
+  /* Notification badge */
+  .nav-badge { background:var(--accent); color:#1a1a00; font-size:10px; font-weight:700; border-radius:99px; padding:1px 6px; margin-left:auto; }
+
+  /* Filter pills */
+  .filter-pills { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+  .pill { padding:5px 12px; border-radius:5px; font-size:12px; cursor:pointer; border:1px solid var(--border); color:var(--text); background:var(--surface); transition:all .15s; font-weight:500; }
+  .pill:hover { border-color:var(--accent2); color:var(--accent2); background:var(--tint-blue); }
+  .pill.active { background:var(--accent2); color:#fff; border-color:var(--accent2); font-weight:700; }
+
+  select option { background:var(--surface); }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">
+    <h2>⚖️ WH Law Firm</h2>
+    <p>工作管理系統</p>
+  </div>
+  <div class="nav-section">主控台</div>
+  <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">🏠</span> 今日工作台</div>
+  <div class="nav-section">案件管理</div>
+  <div class="nav-item" onclick="showPage('matters')"><span class="icon">📂</span> 案件 <span class="nav-badge" id="matters-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('tasks')"><span class="icon">✅</span> 任務 <span class="nav-badge" id="tasks-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('events')"><span class="icon">🗓️</span> 行事曆</div>
+  <div class="nav-section">客戶與文件</div>
+  <div class="nav-item" onclick="showPage('clients')"><span class="icon">👥</span> 客戶</div>
+  <div class="nav-section">工具</div>
+  <div class="nav-item" onclick="showPage('judiciary')"><span class="icon">🔍</span> 司法院查詢</div>
+  <div class="nav-item" onclick="showPage('knowledge')"><span class="icon">🧠</span> 法律知識庫</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="page-dashboard" class="page active">
+    <div class="today-panel">
+      <div class="today-date" id="today-date"></div>
+      <div class="today-title">早安！今天要處理哪三件事？</div>
+      <div id="today-3things">
+        <div class="check-item"><input type="checkbox" id="t1" onchange="toggleToday(this)"><label for="t1">確認今日開庭 / 期限</label></div>
+        <div class="check-item"><input type="checkbox" id="t2" onchange="toggleToday(this)"><label for="t2">更新「下一步行動」</label></div>
+        <div class="check-item"><input type="checkbox" id="t3" onchange="toggleToday(this)"><label for="t3">完成 P0 / P1 任務</label></div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <!-- Today Events -->
+      <div class="card">
+        <div class="card-title">📅 今日 / 近期事件</div>
+        <div id="today-events-list"><p style="font-size:13px;color:var(--text-muted)">載入中...</p></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-ghost btn-sm" onclick="showPage('events')">查看全部 →</button>
+        </div>
+      </div>
+      <!-- P0/P1 Tasks -->
+      <div class="card">
+        <div class="card-title">🔥 優先任務（P0 / P1）</div>
+        <div id="priority-tasks-list"><p style="font-size:13px;color:var(--text-muted)">載入中...</p></div>
+        <div style="margin-top:12px">
+          <button class="btn btn-ghost btn-sm" onclick="showPage('tasks')">查看全部 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-4" style="margin-bottom:20px">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-active-matters" style="color:var(--blue)">0</div>
+        <div class="stat-label">進行中案件</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-p0-tasks" style="color:var(--red)">0</div>
+        <div class="stat-label">P0 緊急任務</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-upcoming-events" style="color:var(--orange)">0</div>
+        <div class="stat-label">7天內事件</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-high-risk" style="color:var(--red)">0</div>
+        <div class="stat-label">高重要案件</div>
+      </div>
+    </div>
+
+    <!-- Weekly matters with deadlines -->
+    <div class="card">
+      <div class="card-title">📌 本週截止案件</div>
+      <div id="weekly-matters"></div>
+    </div>
+  </div>
+
+  <!-- ===== MATTERS ===== -->
+  <div id="page-matters" class="page">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>📂 案件管理</h1><p>所有委任案件</p></div>
+      <button class="btn btn-primary" onclick="openModal('matter')">＋ 新增案件</button>
+    </div>
+
+    <div class="filter-pills">
+      <span class="pill active" onclick="filterMatters('all',this)">全部</span>
+      <span class="pill" onclick="filterMatters('接案',this)">接案</span>
+      <span class="pill" onclick="filterMatters('準備',this)">準備</span>
+      <span class="pill" onclick="filterMatters('進行中',this)">進行中</span>
+      <span class="pill" onclick="filterMatters('結案',this)">結案</span>
+      <span class="pill" style="margin-left:auto" onclick="toggleMatterView(this)" id="view-toggle">看板檢視</span>
+    </div>
+
+    <div id="matters-kanban" style="display:none">
+      <div class="kanban" id="kanban-board"></div>
+    </div>
+    <div id="matters-table-view">
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>案件名稱 / 案號</th><th>領域</th><th>狀態</th><th>重要程度</th><th>主要截止日</th><th>下一步行動</th><th>操作</th>
+            </tr></thead>
+            <tbody id="matters-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TASKS ===== -->
+  <div id="page-tasks" class="page">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>✅ 任務管理</h1><p>按優先級處理</p></div>
+      <button class="btn btn-primary" onclick="openModal('task')">＋ 新增任務</button>
+    </div>
+
+    <div class="filter-pills">
+      <span class="pill active" onclick="filterTasks('all',this)">全部</span>
+      <span class="pill" onclick="filterTasks('P0',this)">🔴 P0</span>
+      <span class="pill" onclick="filterTasks('P1',this)">🟠 P1</span>
+      <span class="pill" onclick="filterTasks('P2',this)">🟡 P2</span>
+      <span class="pill" onclick="filterTasks('P3',this)">⬜ P3</span>
+      <span class="pill" onclick="filterTasks('待處理',this)">待處理</span>
+      <span class="pill" onclick="filterTasks('進行中',this)">進行中</span>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>完成</th><th>任務</th><th>優先級</th><th>狀態</th><th>關聯案件</th><th>到期日</th><th>預估(分)</th><th>最小下一步</th><th>操作</th>
+          </tr></thead>
+          <tbody id="tasks-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EVENTS ===== -->
+  <div id="page-events" class="page">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>🗓️ 行事曆</h1><p>開庭、會議、截止日</p></div>
+      <button class="btn btn-primary" onclick="openModal('event')">＋ 新增事件</button>
+    </div>
+
+    <div class="filter-pills">
+      <span class="pill active" onclick="filterEvents('all',this)">全部</span>
+      <span class="pill" onclick="filterEvents('開庭',this)">⚖️ 開庭</span>
+      <span class="pill" onclick="filterEvents('截止日',this)">📌 截止日</span>
+      <span class="pill" onclick="filterEvents('會議',this)">💬 會議</span>
+      <span class="pill" onclick="filterEvents('客戶聯繫',this)">📞 客戶聯繫</span>
+    </div>
+
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>完成</th><th>事件標題</th><th>類型</th><th>日期時間</th><th>重要程度</th><th>關聯案件</th><th>地點</th><th>操作</th>
+          </tr></thead>
+          <tbody id="events-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CLIENTS ===== -->
+  <div id="page-clients" class="page">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>👥 客戶管理</h1></div>
+      <button class="btn btn-primary" onclick="openModal('client')">＋ 新增客戶</button>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>客戶姓名</th><th>聯絡方式</th><th>相關案件</th><th>備註</th><th>操作</th>
+          </tr></thead>
+          <tbody id="clients-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== JUDICIARY ===== -->
+  <div id="page-judiciary" class="page">
+    <div class="page-header">
+      <h1>🔍 司法院資料查詢</h1>
+      <p>電子訴訟平台、裁判書查詢、法規資源一站整合</p>
+    </div>
+
+    <!-- 電子訴訟平台主入口 -->
+    <div style="background:linear-gradient(120deg,#1a2a3a 0%,#1e3858 100%);border:2px solid #c8a020;border-radius:14px;padding:22px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:0 4px 20px rgba(26,42,58,.25)">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#e8c840;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">司法院官方平台</div>
+        <div style="font-size:18px;font-weight:800;color:#f0e8c0;margin-bottom:6px">⚖️ 電子訴訟文書服務平台</div>
+        <div style="font-size:13px;color:#9ab8d0;line-height:1.6">線上起訴、提交書狀、閱卷申請、卷證上傳、案件進度查詢<br>
+        支援：民事 · 民事執行 · 商業 · 智慧民事/行政 · 行政訴訟 · 憲法訴訟</div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-blue">登入需自然人憑證</span>
+          <span class="badge badge-purple">支援律師執業憑證</span>
+          <span class="badge badge-green">建議 Chrome / Edge</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;gap:10px">
+        <a href="https://efiling.judicial.gov.tw/jud/jss/t1/Index.init.ctr?openExternalBrowser=1" target="_blank" class="btn btn-primary" style="text-decoration:none;font-size:14px;padding:10px 22px">🚀 開啟電子訴訟平台</a>
+        <button class="btn btn-ghost" onclick="showEfilingFeatures()" style="font-size:12px">📋 查看功能說明</button>
+      </div>
+    </div>
+
+    <!-- 電子訴訟功能說明（可展開） -->
+    <div id="efiling-features" style="display:none;margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">📋 電子訴訟文書服務平台 — 功能說明</div>
+        <div class="grid-3" style="gap:12px">
+          <div style="background:var(--tint-gold);border:1px solid #d8c060;border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:#9a6800;margin-bottom:8px">📤 提交服務</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 線上起訴</li>
+              <li>✦ 電子書狀上傳</li>
+              <li>✦ 電子卷證複製申請</li>
+              <li>✦ 集中報到</li>
+            </ul>
+          </div>
+          <div style="background:var(--tint-blue);border:1px solid #b0c8e8;border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:var(--blue);margin-bottom:8px">🔎 查詢服務</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 案件進度查詢</li>
+              <li>✦ 開庭進度查詢</li>
+              <li>✦ 筆錄調閱</li>
+              <li>✦ 聲請閱卷</li>
+            </ul>
+          </div>
+          <div style="background:var(--tint-gray);border:1px solid var(--border);border-radius:8px;padding:14px">
+            <div style="font-weight:700;color:#385060;margin-bottom:8px">⚠️ 注意事項</div>
+            <ul style="font-size:12px;color:var(--text);line-height:2;list-style:none">
+              <li>✦ 需自然人憑證登入</li>
+              <li>✦ 解析度建議 1920×1080</li>
+              <li>✦ 家事/刑事附民尚未開放</li>
+              <li>✦ 密碼需含大小寫+數字+符號</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">⚖️ 裁判書查詢</div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px">法院裁判書全文資料庫（公開資料）</p>
+        <div class="form-row">
+          <label>關鍵字搜尋</label>
+          <input type="text" id="jud-keyword" placeholder="輸入案號或關鍵字...">
+        </div>
+        <div class="form-row">
+          <label>法院</label>
+          <select id="jud-court">
+            <option value="">全部法院</option>
+            <option value="TPS">最高法院</option>
+            <option value="TPH">臺灣高等法院</option>
+            <option value="TPC">臺灣臺北地方法院</option>
+            <option value="SLD">臺灣新北地方法院</option>
+            <option value="TPD">臺灣桃園地方法院</option>
+            <option value="KLD">臺灣基隆地方法院</option>
+            <option value="ILD">臺灣宜蘭地方法院</option>
+            <option value="HLD">臺灣花蓮地方法院</option>
+            <option value="TND">臺灣臺南地方法院</option>
+            <option value="KSD">臺灣高雄地方法院</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>案件類型</label>
+          <select id="jud-type">
+            <option value="">全部</option>
+            <option value="V">民事</option>
+            <option value="C">刑事</option>
+            <option value="A">行政</option>
+            <option value="L">勞動</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="openJudSearch()">🔍 查詢裁判書</button>
+          <button class="btn btn-ghost" onclick="window.open('https://judgment.judicial.gov.tw/FJUD/default.aspx','_blank')">開啟系統 ↗</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 司法院快速連結</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://efiling.judicial.gov.tw/jud/jss/t1/Index.init.ctr?openExternalBrowser=1" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-gold);border:1px solid #d8c060;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s" onmouseover="this.style.borderColor='#c8a020'" onmouseout="this.style.borderColor='#d8c060'"">
+            <span style="font-size:18px">🖥️</span>
+            <div><div>電子訴訟文書服務平台</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">線上起訴、書狀提交、閱卷申請</div></div>
+          </a>
+          <a href="https://judgment.judicial.gov.tw/FJUD/default.aspx" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-blue);border:1px solid #b0c8e8;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">⚖️</span>
+            <div><div>裁判書查詢系統</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">全文資料庫，公開裁判書</div></div>
+          </a>
+          <a href="https://www.judicial.gov.tw/tw/lp-1888-1.html" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--tint-gray);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">📜</span>
+            <div><div>司法院法規資料庫</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">法律、施行細則、判例</div></div>
+          </a>
+          <a href="https://lis.ly.gov.tw/lglawc/lawsingle" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#f0f8f0;border:1px solid #90d8b0;border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">📖</span>
+            <div><div>立法院法律系統</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">法案查詢、歷史版本</div></div>
+          </a>
+          <a href="https://mojlaw.moj.gov.tw/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;font-weight:600;transition:all .15s">
+            <span style="font-size:18px">🏛️</span>
+            <div><div>法務部法規查詢</div><div style="font-size:11px;color:var(--text-muted);font-weight:400">行政規則、函釋</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔎 依案件快速跳轉裁判書查詢</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">點選案件名稱，直接以案件關鍵字搜尋司法院裁判書</p>
+      <div id="matter-judgment-links"></div>
+    </div>
+  </div>
+
+  <!-- ===== KNOWLEDGE ===== -->
+  <div id="page-knowledge" class="page">
+    <div class="page-header" style="display:flex;align-items:center;justify-content:space-between">
+      <div><h1>🧠 法律知識庫</h1></div>
+      <button class="btn btn-primary" onclick="openModal('knowledge')">＋ 新增筆記</button>
+    </div>
+    <div class="filter-pills">
+      <span class="pill active" onclick="filterKnowledge('all',this)">全部</span>
+      <span class="pill" onclick="filterKnowledge('民事',this)">民事</span>
+      <span class="pill" onclick="filterKnowledge('刑事',this)">刑事</span>
+      <span class="pill" onclick="filterKnowledge('勞動',this)">勞動</span>
+      <span class="pill" onclick="filterKnowledge('公司',this)">公司</span>
+      <span class="pill" onclick="filterKnowledge('行政',this)">行政</span>
+    </div>
+    <div class="card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>主題</th><th>法領域</th><th>重點整理</th><th>法條/判例</th><th>更新日期</th><th>操作</th>
+          </tr></thead>
+          <tbody id="knowledge-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- ===== MODALS ===== -->
+
+<!-- Matter Modal -->
+<div class="modal-overlay" id="modal-matter">
+  <div class="modal">
+    <h3>📂 <span id="modal-matter-title">新增案件</span></h3>
+    <input type="hidden" id="matter-edit-id">
+    <div class="form-row"><label>案件名稱 / 案號 *</label><input type="text" id="matter-name" placeholder="例：王○○ v. 李○○ 侵權損害賠償"></div>
+    <div class="grid-2">
+      <div class="form-row"><label>領域</label>
+        <select id="matter-domain">
+          <option>民事</option><option>刑事</option><option>勞動</option><option>公司</option><option>行政</option><option>其他</option>
+        </select>
+      </div>
+      <div class="form-row"><label>狀態</label>
+        <select id="matter-status">
+          <option>接案</option><option>準備</option><option>進行中</option><option>結案</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-row"><label>重要程度</label>
+        <select id="matter-importance">
+          <option>高</option><option selected>中</option><option>低</option>
+        </select>
+      </div>
+      <div class="form-row"><label>收費方式</label>
+        <select id="matter-fee">
+          <option>固定</option><option>時數</option><option>成功報酬</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row"><label>主要截止日</label><input type="date" id="matter-deadline"></div>
+    <div class="form-row"><label>摘要</label><textarea id="matter-summary" placeholder="案件說明..."></textarea></div>
+    <div class="form-row"><label>下一步行動</label><input type="text" id="matter-nextstep" placeholder="例：草擬起訴狀第3頁..."></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('matter')">取消</button>
+      <button class="btn btn-primary" onclick="saveMatter()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<div class="modal-overlay" id="modal-task">
+  <div class="modal">
+    <h3>✅ <span id="modal-task-title">新增任務</span></h3>
+    <input type="hidden" id="task-edit-id">
+    <div class="form-row"><label>任務名稱 *</label><input type="text" id="task-name" placeholder="例：草擬答辯狀"></div>
+    <div class="grid-2">
+      <div class="form-row"><label>優先級</label>
+        <select id="task-priority">
+          <option>P0</option><option>P1</option><option selected>P2</option><option>P3</option>
+        </select>
+      </div>
+      <div class="form-row"><label>狀態</label>
+        <select id="task-status">
+          <option>待處理</option><option>進行中</option><option>完成</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-row"><label>到期日</label><input type="date" id="task-due"></div>
+      <div class="form-row"><label>預估時間（分鐘）</label><input type="number" id="task-time" placeholder="60"></div>
+    </div>
+    <div class="form-row"><label>關聯案件</label>
+      <select id="task-matter"><option value="">（無）</option></select>
+    </div>
+    <div class="form-row"><label>最小下一步</label><input type="text" id="task-nextstep" placeholder="例：先找出去年判決..."></div>
+    <div class="form-row"><label>備註</label><textarea id="task-notes"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('task')">取消</button>
+      <button class="btn btn-primary" onclick="saveTask()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Event Modal -->
+<div class="modal-overlay" id="modal-event">
+  <div class="modal">
+    <h3>🗓️ <span id="modal-event-title">新增事件</span></h3>
+    <input type="hidden" id="event-edit-id">
+    <div class="form-row"><label>事件標題 *</label><input type="text" id="event-title" placeholder="例：臺北地院 112年度民訴字第1234號 第一次開庭"></div>
+    <div class="grid-2">
+      <div class="form-row"><label>類型</label>
+        <select id="event-type">
+          <option>開庭</option><option>截止日</option><option>會議</option><option>客戶聯繫</option><option>其他</option>
+        </select>
+      </div>
+      <div class="form-row"><label>重要程度</label>
+        <select id="event-importance">
+          <option>高</option><option selected>中</option><option>低</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-row"><label>日期</label><input type="date" id="event-date"></div>
+      <div class="form-row"><label>時間</label><input type="time" id="event-time"></div>
+    </div>
+    <div class="form-row"><label>關聯案件</label>
+      <select id="event-matter"><option value="">（無）</option></select>
+    </div>
+    <div class="form-row"><label>地點 / 線上連結</label><input type="text" id="event-location" placeholder="例：臺北地院刑事庭 第五法庭"></div>
+    <div class="form-row"><label>備註</label><textarea id="event-notes"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('event')">取消</button>
+      <button class="btn btn-primary" onclick="saveEvent()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Client Modal -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <h3>👤 新增客戶</h3>
+    <input type="hidden" id="client-edit-id">
+    <div class="form-row"><label>姓名 / 機構名稱 *</label><input type="text" id="client-name"></div>
+    <div class="form-row"><label>聯絡電話</label><input type="text" id="client-phone"></div>
+    <div class="form-row"><label>Email</label><input type="email" id="client-email"></div>
+    <div class="form-row"><label>相關案件</label><select id="client-matter"><option value="">（無）</option></select></div>
+    <div class="form-row"><label>備註</label><textarea id="client-notes"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('client')">取消</button>
+      <button class="btn btn-primary" onclick="saveClient()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Knowledge Modal -->
+<div class="modal-overlay" id="modal-knowledge">
+  <div class="modal">
+    <h3>🧠 新增法律筆記</h3>
+    <input type="hidden" id="knowledge-edit-id">
+    <div class="form-row"><label>主題 *</label><input type="text" id="knowledge-title"></div>
+    <div class="form-row"><label>法領域</label>
+      <select id="knowledge-domain">
+        <option>民事</option><option>刑事</option><option>勞動</option><option>公司</option><option>行政</option><option>其他</option>
+      </select>
+    </div>
+    <div class="form-row"><label>重點整理</label><textarea id="knowledge-summary" style="min-height:120px"></textarea></div>
+    <div class="form-row"><label>法條 / 判例</label><textarea id="knowledge-refs"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('knowledge')">取消</button>
+      <button class="btn btn-primary" onclick="saveKnowledge()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ============================================================
+// DATA LAYER - localStorage
+// ============================================================
+const DB = {
+  get: (key) => JSON.parse(localStorage.getItem('whlf_'+key) || '[]'),
+  set: (key, val) => localStorage.setItem('whlf_'+key, JSON.stringify(val)),
+  nextId: (arr) => arr.length ? Math.max(...arr.map(x=>x.id||0))+1 : 1
+};
+
+// Seed data if empty
+function seedData() {
+  if (DB.get('matters').length === 0) {
+    DB.set('matters', [
+      { id:1, name:'王○○ v. 李○○ 侵權損害賠償', domain:'民事', status:'進行中', importance:'高', fee:'固定', deadline:'2026-06-30', summary:'原告主張被告侵占共有土地...', nextstep:'草擬起訴狀附件清單' },
+      { id:2, name:'112年度勞訴字第88號', domain:'勞動', status:'準備', importance:'中', fee:'時數', deadline:'2026-07-15', summary:'解僱爭議，員工主張資遣費計算錯誤', nextstep:'調閱薪資轉帳紀錄' },
+    ]);
+    DB.set('tasks', [
+      { id:1, name:'草擬起訴狀附件', priority:'P0', status:'待處理', due:'2026-06-14', time:90, matterId:1, nextstep:'先整理土地謄本', notes:'', done:false },
+      { id:2, name:'通知客戶開庭時間', priority:'P1', status:'待處理', due:'2026-06-13', time:15, matterId:1, nextstep:'電話確認', notes:'', done:false },
+      { id:3, name:'調閱薪資轉帳紀錄', priority:'P1', status:'進行中', due:'2026-06-20', time:60, matterId:2, nextstep:'向銀行申請', notes:'', done:false },
+    ]);
+    DB.set('events', [
+      { id:1, title:'臺北地院 第一次調解庭', type:'開庭', date:'2026-06-18', time:'10:00', importance:'高', matterId:1, location:'臺北地院民事庭第三調解室', notes:'', done:false },
+      { id:2, title:'起訴狀提交截止', type:'截止日', date:'2026-06-30', time:'', importance:'高', matterId:1, location:'', notes:'', done:false },
+      { id:3, name:'客戶面談 張先生', type:'客戶聯繫', date:'2026-06-16', time:'14:00', importance:'中', matterId:null, location:'事務所', notes:'', done:false },
+    ]);
+    DB.set('clients', [
+      { id:1, name:'王大明', phone:'0912-345-678', email:'wang@example.com', matterId:1, notes:'委任人，需以書面溝通' },
+    ]);
+    DB.set('knowledge', [
+      { id:1, title:'職場霸凌防治', domain:'勞動', summary:'1. 須有持續性、系統性騷擾行為\n2. 雇主連帶責任要件', refs:'勞基法§14；性騷擾防治法§13', updated:'2026-06-01' },
+    ]);
+  }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  event?.currentTarget?.classList.add('active');
+  // Refresh page
+  const refresh = { dashboard: renderDashboard, matters: renderMatters, tasks: renderTasks, events: renderEvents, clients: renderClients, judiciary: renderJudiciary, knowledge: renderKnowledge };
+  if (refresh[id]) refresh[id]();
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return `${dt.getFullYear()}/${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getDate()).padStart(2,'0')}`;
+}
+function daysUntil(d) {
+  if (!d) return null;
+  const diff = new Date(d) - new Date(new Date().toDateString());
+  return Math.ceil(diff / 86400000);
+}
+function deadlineBadge(d) {
+  const days = daysUntil(d);
+  if (days === null) return '';
+  if (days < 0) return `<span class="badge badge-red">逾期${Math.abs(days)}天</span>`;
+  if (days === 0) return `<span class="badge badge-red">今天到期</span>`;
+  if (days <= 3) return `<span class="badge badge-orange">${days}天後</span>`;
+  if (days <= 7) return `<span class="badge badge-yellow">${days}天後</span>`;
+  return `<span class="badge badge-gray">${fmtDate(d)}</span>`;
+}
+function domainBadge(d) {
+  const map = { 民事:'blue', 刑事:'red', 勞動:'orange', 公司:'green', 行政:'purple', 其他:'gray' };
+  return `<span class="badge badge-${map[d]||'gray'}">${d}</span>`;
+}
+function statusBadge(s) {
+  const map = { 接案:'gray', 準備:'yellow', 進行中:'blue', 結案:'green', 待處理:'gray', 完成:'green' };
+  return `<span class="badge badge-${map[s]||'gray'}">${s}</span>`;
+}
+function importanceDot(i) {
+  const map = { 高:'red', 中:'yellow', 低:'gray' };
+  return `<span class="dot dot-${map[i]||'gray'}"></span> ${i}`;
+}
+function priorityBadge(p) {
+  const map = { P0:'red', P1:'orange', P2:'yellow', P3:'gray' };
+  return `<span class="badge badge-${map[p]||'gray'}">${p}</span>`;
+}
+function getMatterName(id) {
+  const m = DB.get('matters').find(x => x.id == id);
+  return m ? m.name : '—';
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display='none', 2500);
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  // Date
+  const now = new Date();
+  const days = ['日','一','二','三','四','五','六'];
+  document.getElementById('today-date').textContent =
+    `${now.getFullYear()} 年 ${now.getMonth()+1} 月 ${now.getDate()} 日（週${days[now.getDay()]}）`;
+
+  const matters = DB.get('matters');
+  const tasks = DB.get('tasks');
+  const events = DB.get('events');
+  const today = new Date().toISOString().slice(0,10);
+
+  // Stats
+  document.getElementById('stat-active-matters').textContent = matters.filter(m=>m.status==='進行中').length;
+  document.getElementById('stat-p0-tasks').textContent = tasks.filter(t=>t.priority==='P0'&&t.status!=='完成').length;
+  document.getElementById('stat-upcoming-events').textContent = events.filter(e=>!e.done&&e.date>=today&&daysUntil(e.date)<=7).length;
+  document.getElementById('stat-high-risk').textContent = matters.filter(m=>m.importance==='高'&&m.status!=='結案').length;
+
+  // Badges
+  document.getElementById('matters-badge').textContent = matters.filter(m=>m.status!=='結案').length;
+  document.getElementById('tasks-badge').textContent = tasks.filter(t=>!t.done&&(t.priority==='P0'||t.priority==='P1')).length;
+
+  // Today events
+  const todayEvents = events.filter(e => !e.done && e.date >= today).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  document.getElementById('today-events-list').innerHTML = todayEvents.length
+    ? todayEvents.map(e => `
+      <div class="timeline-item">
+        <div class="timeline-dot dot-${e.type==='開庭'?'red':e.type==='截止日'?'orange':'blue'}"></div>
+        <div class="timeline-content">
+          <div class="timeline-title">${e.title||e.name}</div>
+          <div class="timeline-meta">${e.type} · ${fmtDate(e.date)}${e.time?' '+e.time:''} ${e.location?'· '+e.location:''}</div>
+        </div>
+        ${deadlineBadge(e.date)}
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--text-muted)">近期無排定事件</p>';
+
+  // Priority tasks
+  const prioTasks = tasks.filter(t=>!t.done&&(t.priority==='P0'||t.priority==='P1')).sort((a,b)=>a.priority.localeCompare(b.priority)).slice(0,6);
+  document.getElementById('priority-tasks-list').innerHTML = prioTasks.length
+    ? prioTasks.map(t => `
+      <div class="check-item ${t.done?'done':''}">
+        <input type="checkbox" ${t.done?'checked':''} onchange="quickDoneTask(${t.id},this)">
+        <label>${priorityBadge(t.priority)} ${t.name} <span style="color:var(--text-muted);font-size:12px">${t.matterId?'['+getMatterName(t.matterId).slice(0,15)+'...]':''}</span></label>
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--text-muted)">無緊急任務 🎉</p>';
+
+  // Weekly matters
+  const weekEnd = new Date(); weekEnd.setDate(weekEnd.getDate()+7);
+  const weekStr = weekEnd.toISOString().slice(0,10);
+  const weekMatters = matters.filter(m=>m.deadline&&m.deadline<=weekStr&&m.status!=='結案').sort((a,b)=>a.deadline.localeCompare(b.deadline));
+  document.getElementById('weekly-matters').innerHTML = weekMatters.length
+    ? `<div class="table-wrap"><table><thead><tr><th>案件</th><th>領域</th><th>狀態</th><th>截止日</th><th>下一步</th></tr></thead><tbody>
+      ${weekMatters.map(m=>`<tr>
+        <td><strong>${m.name}</strong></td>
+        <td>${domainBadge(m.domain)}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td>${deadlineBadge(m.deadline)}</td>
+        <td style="color:var(--text-muted);font-size:12px">${m.nextstep||'—'}</td>
+      </tr>`).join('')}
+      </tbody></table></div>`
+    : '<p style="font-size:13px;color:var(--text-muted)">本週無截止案件</p>';
+}
+
+function quickDoneTask(id, cb) {
+  const tasks = DB.get('tasks');
+  const t = tasks.find(x=>x.id===id);
+  if (t) { t.done = cb.checked; t.status = cb.checked ? '完成' : '待處理'; DB.set('tasks', tasks); }
+  renderDashboard();
+}
+
+function toggleToday(cb) {
+  cb.closest('.check-item').classList.toggle('done', cb.checked);
+}
+
+// ============================================================
+// MATTERS
+// ============================================================
+let matterFilter = 'all', matterView = 'table';
+
+function renderMatters() {
+  const matters = DB.get('matters');
+  const filtered = matterFilter === 'all' ? matters : matters.filter(m=>m.status===matterFilter);
+
+  if (matterView === 'kanban') {
+    renderKanban(filtered);
+  } else {
+    document.getElementById('matters-tbody').innerHTML = filtered.map(m => `<tr>
+      <td><strong>${m.name}</strong></td>
+      <td>${domainBadge(m.domain)}</td>
+      <td>${statusBadge(m.status)}</td>
+      <td>${importanceDot(m.importance)}</td>
+      <td>${deadlineBadge(m.deadline)}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${m.nextstep||'—'}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" onclick='editMatter(${m.id})'>編輯</button>
+        <button class="btn btn-danger btn-sm" onclick='deleteMatter(${m.id})'>刪除</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">尚無案件</td></tr>';
+  }
+}
+
+function renderKanban(matters) {
+  const cols = ['接案','準備','進行中','結案'];
+  const colColors = { 接案:'gray', 準備:'yellow', 進行中:'blue', 結案:'green' };
+  document.getElementById('kanban-board').innerHTML = cols.map(col => `
+    <div class="kanban-col">
+      <div class="kanban-col-title"><span>${col}</span><span class="badge badge-${colColors[col]}">${matters.filter(m=>m.status===col).length}</span></div>
+      ${matters.filter(m=>m.status===col).map(m=>`
+        <div class="kanban-card" onclick='editMatter(${m.id})'>
+          <div class="kanban-card-title">${m.name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${m.nextstep||''}</div>
+          <div class="kanban-card-meta">
+            ${domainBadge(m.domain)}
+            ${m.deadline ? deadlineBadge(m.deadline) : ''}
+            <span style="font-size:11px;color:var(--text-muted)">${importanceDot(m.importance)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function filterMatters(val, el) {
+  matterFilter = val;
+  document.querySelectorAll('#page-matters .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderMatters();
+}
+
+function toggleMatterView(el) {
+  matterView = matterView === 'table' ? 'kanban' : 'table';
+  document.getElementById('matters-kanban').style.display = matterView === 'kanban' ? 'block' : 'none';
+  document.getElementById('matters-table-view').style.display = matterView === 'table' ? 'block' : 'none';
+  el.textContent = matterView === 'table' ? '看板檢視' : '列表檢視';
+  renderMatters();
+}
+
+function deleteMatter(id) {
+  if (!confirm('確定刪除此案件？')) return;
+  DB.set('matters', DB.get('matters').filter(m=>m.id!==id));
+  renderMatters(); toast('案件已刪除');
+}
+
+function editMatter(id) {
+  const m = DB.get('matters').find(x=>x.id===id);
+  if (!m) return;
+  document.getElementById('modal-matter-title').textContent = '編輯案件';
+  document.getElementById('matter-edit-id').value = id;
+  document.getElementById('matter-name').value = m.name;
+  document.getElementById('matter-domain').value = m.domain;
+  document.getElementById('matter-status').value = m.status;
+  document.getElementById('matter-importance').value = m.importance;
+  document.getElementById('matter-fee').value = m.fee;
+  document.getElementById('matter-deadline').value = m.deadline||'';
+  document.getElementById('matter-summary').value = m.summary||'';
+  document.getElementById('matter-nextstep').value = m.nextstep||'';
+  document.getElementById('modal-matter').classList.add('open');
+}
+
+// ============================================================
+// TASKS
+// ============================================================
+let taskFilter = 'all';
+
+function renderTasks() {
+  const tasks = DB.get('tasks');
+  let filtered = tasks;
+  if (taskFilter !== 'all') {
+    filtered = tasks.filter(t => t.priority===taskFilter || t.status===taskFilter);
+  }
+  filtered.sort((a,b) => {
+    const po = ['P0','P1','P2','P3'];
+    return po.indexOf(a.priority) - po.indexOf(b.priority);
+  });
+
+  document.getElementById('tasks-tbody').innerHTML = filtered.map(t => `<tr style="${t.done?'opacity:.5':''}">
+    <td><input type="checkbox" ${t.done?'checked':''} onchange='toggleTask(${t.id},this)' style="accent-color:var(--accent)"></td>
+    <td><strong>${t.name}</strong></td>
+    <td>${priorityBadge(t.priority)}</td>
+    <td>${statusBadge(t.status)}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${t.matterId?getMatterName(t.matterId).slice(0,20):'—'}</td>
+    <td>${deadlineBadge(t.due)}</td>
+    <td style="text-align:center;color:var(--text-muted)">${t.time||'—'}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${t.nextstep||'—'}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick='editTask(${t.id})'>編輯</button>
+      <button class="btn btn-danger btn-sm" onclick='deleteTask(${t.id})'>刪除</button>
+    </td>
+  </tr>`).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:24px">尚無任務</td></tr>';
+}
+
+function filterTasks(val, el) {
+  taskFilter = val;
+  document.querySelectorAll('#page-tasks .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderTasks();
+}
+
+function toggleTask(id, cb) {
+  const tasks = DB.get('tasks');
+  const t = tasks.find(x=>x.id===id);
+  if (t) { t.done = cb.checked; t.status = cb.checked ? '完成' : '待處理'; DB.set('tasks', tasks); }
+  renderTasks();
+}
+
+function deleteTask(id) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('tasks', DB.get('tasks').filter(t=>t.id!==id));
+  renderTasks(); toast('任務已刪除');
+}
+
+function editTask(id) {
+  const t = DB.get('tasks').find(x=>x.id===id);
+  if (!t) return;
+  document.getElementById('modal-task-title').textContent = '編輯任務';
+  document.getElementById('task-edit-id').value = id;
+  document.getElementById('task-name').value = t.name;
+  document.getElementById('task-priority').value = t.priority;
+  document.getElementById('task-status').value = t.status;
+  document.getElementById('task-due').value = t.due||'';
+  document.getElementById('task-time').value = t.time||'';
+  document.getElementById('task-nextstep').value = t.nextstep||'';
+  document.getElementById('task-notes').value = t.notes||'';
+  populateMatterSelects();
+  document.getElementById('task-matter').value = t.matterId||'';
+  document.getElementById('modal-task').classList.add('open');
+}
+
+// ============================================================
+// EVENTS
+// ============================================================
+let eventFilter = 'all';
+
+function renderEvents() {
+  const events = DB.get('events');
+  const filtered = eventFilter === 'all' ? events : events.filter(e=>e.type===eventFilter);
+  const sorted = filtered.sort((a,b)=>a.date.localeCompare(b.date));
+
+  document.getElementById('events-tbody').innerHTML = sorted.map(e => `<tr style="${e.done?'opacity:.5':''}">
+    <td><input type="checkbox" ${e.done?'checked':''} onchange='toggleEvent(${e.id},this)' style="accent-color:var(--accent)"></td>
+    <td><strong>${e.title||e.name}</strong></td>
+    <td>${eventTypeBadge(e.type)}</td>
+    <td>${fmtDate(e.date)} ${e.time||''}</td>
+    <td>${importanceDot(e.importance)}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${e.matterId?getMatterName(e.matterId).slice(0,20):'—'}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${e.location||'—'}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick='editEvent(${e.id})'>編輯</button>
+      <button class="btn btn-danger btn-sm" onclick='deleteEvent(${e.id})'>刪除</button>
+    </td>
+  </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">尚無事件</td></tr>';
+}
+
+function eventTypeBadge(t) {
+  const map = { 開庭:'red', 截止日:'orange', 會議:'blue', 客戶聯繫:'green', 其他:'gray' };
+  return `<span class="badge badge-${map[t]||'gray'}">${t}</span>`;
+}
+
+function filterEvents(val, el) {
+  eventFilter = val;
+  document.querySelectorAll('#page-events .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderEvents();
+}
+
+function toggleEvent(id, cb) {
+  const events = DB.get('events');
+  const e = events.find(x=>x.id===id);
+  if (e) { e.done = cb.checked; DB.set('events', events); }
+  renderEvents();
+}
+
+function deleteEvent(id) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('events', DB.get('events').filter(e=>e.id!==id));
+  renderEvents(); toast('事件已刪除');
+}
+
+function editEvent(id) {
+  const e = DB.get('events').find(x=>x.id===id);
+  if (!e) return;
+  document.getElementById('modal-event-title').textContent = '編輯事件';
+  document.getElementById('event-edit-id').value = id;
+  document.getElementById('event-title').value = e.title||e.name||'';
+  document.getElementById('event-type').value = e.type;
+  document.getElementById('event-importance').value = e.importance;
+  document.getElementById('event-date').value = e.date||'';
+  document.getElementById('event-time').value = e.time||'';
+  document.getElementById('event-location').value = e.location||'';
+  document.getElementById('event-notes').value = e.notes||'';
+  populateMatterSelects();
+  document.getElementById('event-matter').value = e.matterId||'';
+  document.getElementById('modal-event').classList.add('open');
+}
+
+// ============================================================
+// CLIENTS
+// ============================================================
+function renderClients() {
+  const clients = DB.get('clients');
+  document.getElementById('clients-tbody').innerHTML = clients.map(c => `<tr>
+    <td><strong>${c.name}</strong></td>
+    <td>${c.phone||'—'} ${c.email?`<br><span style="font-size:11px;color:var(--text-muted)">${c.email}</span>`:''}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${c.matterId?getMatterName(c.matterId).slice(0,25):'—'}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${c.notes||'—'}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick='editClient(${c.id})'>編輯</button>
+      <button class="btn btn-danger btn-sm" onclick='deleteClient(${c.id})'>刪除</button>
+    </td>
+  </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px">尚無客戶</td></tr>';
+}
+
+function deleteClient(id) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('clients', DB.get('clients').filter(c=>c.id!==id));
+  renderClients(); toast('客戶已刪除');
+}
+
+function editClient(id) {
+  const c = DB.get('clients').find(x=>x.id===id);
+  if (!c) return;
+  document.getElementById('client-edit-id').value = id;
+  document.getElementById('client-name').value = c.name;
+  document.getElementById('client-phone').value = c.phone||'';
+  document.getElementById('client-email').value = c.email||'';
+  document.getElementById('client-notes').value = c.notes||'';
+  populateMatterSelects();
+  document.getElementById('client-matter').value = c.matterId||'';
+  document.getElementById('modal-client').classList.add('open');
+}
+
+// ============================================================
+// JUDICIARY
+// ============================================================
+function renderJudiciary() {
+  const matters = DB.get('matters');
+  document.getElementById('matter-judgment-links').innerHTML = matters.length
+    ? matters.filter(m=>m.status!=='結案').map(m => `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+        <div>
+          <div style="font-size:13px;font-weight:600">${m.name}</div>
+          <div style="font-size:12px;color:var(--text-muted)">${m.domain} · ${m.status}</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="openJudForMatter('${encodeURIComponent(m.name)}')">🔍 查詢裁判書</button>
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--text-muted)">無進行中案件</p>';
+}
+
+function openJudForMatter(name) {
+  const keyword = decodeURIComponent(name);
+  window.open(`https://judgment.judicial.gov.tw/FJUD/default.aspx?q=${encodeURIComponent(keyword)}`, '_blank');
+}
+
+function openJudSearch() {
+  const keyword = document.getElementById('jud-keyword').value;
+  const court = document.getElementById('jud-court').value;
+  const type = document.getElementById('jud-type').value;
+  let url = 'https://judgment.judicial.gov.tw/FJUD/default.aspx?';
+  if (keyword) url += `q=${encodeURIComponent(keyword)}&`;
+  if (court) url += `court=${court}&`;
+  if (type) url += `type=${type}`;
+  window.open(url, '_blank');
+}
+
+function judSearch() {}
+
+function showEfilingFeatures() {
+  const el = document.getElementById('efiling-features');
+  if (el) { el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+}
+
+// ============================================================
+// KNOWLEDGE
+// ============================================================
+let knowledgeFilter = 'all';
+
+function renderKnowledge() {
+  const items = DB.get('knowledge');
+  const filtered = knowledgeFilter === 'all' ? items : items.filter(k=>k.domain===knowledgeFilter);
+
+  document.getElementById('knowledge-tbody').innerHTML = filtered.map(k => `<tr>
+    <td><strong>${k.title}</strong></td>
+    <td>${domainBadge(k.domain)}</td>
+    <td style="font-size:12px;color:var(--text-muted);max-width:300px">${(k.summary||'').replace(/\n/g,'<br>').slice(0,100)}</td>
+    <td style="font-size:12px;color:var(--accent)">${k.refs||'—'}</td>
+    <td style="font-size:12px;color:var(--text-muted)">${k.updated||'—'}</td>
+    <td>
+      <button class="btn btn-ghost btn-sm" onclick='editKnowledge(${k.id})'>編輯</button>
+      <button class="btn btn-danger btn-sm" onclick='deleteKnowledge(${k.id})'>刪除</button>
+    </td>
+  </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">尚無筆記</td></tr>';
+}
+
+function filterKnowledge(val, el) {
+  knowledgeFilter = val;
+  document.querySelectorAll('#page-knowledge .pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderKnowledge();
+}
+
+function deleteKnowledge(id) {
+  if (!confirm('確定刪除？')) return;
+  DB.set('knowledge', DB.get('knowledge').filter(k=>k.id!==id));
+  renderKnowledge(); toast('筆記已刪除');
+}
+
+function editKnowledge(id) {
+  const k = DB.get('knowledge').find(x=>x.id===id);
+  if (!k) return;
+  document.getElementById('knowledge-edit-id').value = id;
+  document.getElementById('knowledge-title').value = k.title;
+  document.getElementById('knowledge-domain').value = k.domain;
+  document.getElementById('knowledge-summary').value = k.summary||'';
+  document.getElementById('knowledge-refs').value = k.refs||'';
+  document.getElementById('modal-knowledge').classList.add('open');
+}
+
+// ============================================================
+// MODAL / SAVE
+// ============================================================
+function populateMatterSelects() {
+  const matters = DB.get('matters');
+  const opts = '<option value="">（無）</option>' + matters.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  ['task-matter','event-matter','client-matter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+}
+
+function openModal(type) {
+  if (type==='task'||type==='event'||type==='client') populateMatterSelects();
+  // Reset
+  const fields = {
+    matter: ['matter-edit-id','matter-name','matter-summary','matter-nextstep'],
+    task: ['task-edit-id','task-name','task-nextstep','task-notes'],
+    event: ['event-edit-id','event-title','event-location','event-notes'],
+    client: ['client-edit-id','client-name','client-phone','client-email','client-notes'],
+    knowledge: ['knowledge-edit-id','knowledge-title','knowledge-summary','knowledge-refs']
+  };
+  (fields[type]||[]).forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  if (type==='matter') { document.getElementById('modal-matter-title').textContent='新增案件'; document.getElementById('matter-deadline').value=''; }
+  if (type==='task') { document.getElementById('modal-task-title').textContent='新增任務'; document.getElementById('task-due').value=''; document.getElementById('task-priority').value='P2'; document.getElementById('task-status').value='待處理'; document.getElementById('task-time').value=''; }
+  if (type==='event') { document.getElementById('modal-event-title').textContent='新增事件'; document.getElementById('event-date').value=''; document.getElementById('event-time').value=''; document.getElementById('event-type').value='開庭'; document.getElementById('event-importance').value='中'; }
+  document.getElementById('modal-'+type).classList.add('open');
+}
+
+function closeModal(type) {
+  document.getElementById('modal-'+type).classList.remove('open');
+}
+
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', e => { if(e.target===el) el.classList.remove('open'); });
+});
+
+function saveMatter() {
+  const name = document.getElementById('matter-name').value.trim();
+  if (!name) { alert('請輸入案件名稱'); return; }
+  const matters = DB.get('matters');
+  const editId = parseInt(document.getElementById('matter-edit-id').value);
+  const data = {
+    name, domain: document.getElementById('matter-domain').value,
+    status: document.getElementById('matter-status').value,
+    importance: document.getElementById('matter-importance').value,
+    fee: document.getElementById('matter-fee').value,
+    deadline: document.getElementById('matter-deadline').value,
+    summary: document.getElementById('matter-summary').value,
+    nextstep: document.getElementById('matter-nextstep').value
+  };
+  if (editId) {
+    const i = matters.findIndex(m=>m.id===editId);
+    if (i>=0) matters[i] = { ...matters[i], ...data };
+  } else {
+    matters.push({ id: DB.nextId(matters), ...data });
+  }
+  DB.set('matters', matters);
+  closeModal('matter'); renderMatters(); toast('案件已儲存 ✓');
+}
+
+function saveTask() {
+  const name = document.getElementById('task-name').value.trim();
+  if (!name) { alert('請輸入任務名稱'); return; }
+  const tasks = DB.get('tasks');
+  const editId = parseInt(document.getElementById('task-edit-id').value);
+  const matterId = parseInt(document.getElementById('task-matter').value)||null;
+  const data = {
+    name, priority: document.getElementById('task-priority').value,
+    status: document.getElementById('task-status').value,
+    due: document.getElementById('task-due').value,
+    time: parseInt(document.getElementById('task-time').value)||null,
+    matterId, nextstep: document.getElementById('task-nextstep').value,
+    notes: document.getElementById('task-notes').value,
+    done: document.getElementById('task-status').value==='完成'
+  };
+  if (editId) {
+    const i = tasks.findIndex(t=>t.id===editId);
+    if (i>=0) tasks[i] = { ...tasks[i], ...data };
+  } else {
+    tasks.push({ id: DB.nextId(tasks), ...data });
+  }
+  DB.set('tasks', tasks);
+  closeModal('task'); renderTasks(); toast('任務已儲存 ✓');
+}
+
+function saveEvent() {
+  const title = document.getElementById('event-title').value.trim();
+  if (!title) { alert('請輸入事件標題'); return; }
+  const events = DB.get('events');
+  const editId = parseInt(document.getElementById('event-edit-id').value);
+  const matterId = parseInt(document.getElementById('event-matter').value)||null;
+  const data = {
+    title, type: document.getElementById('event-type').value,
+    importance: document.getElementById('event-importance').value,
+    date: document.getElementById('event-date').value,
+    time: document.getElementById('event-time').value,
+    matterId, location: document.getElementById('event-location').value,
+    notes: document.getElementById('event-notes').value,
+    done: false
+  };
+  if (editId) {
+    const i = events.findIndex(e=>e.id===editId);
+    if (i>=0) events[i] = { ...events[i], ...data };
+  } else {
+    events.push({ id: DB.nextId(events), ...data });
+  }
+  DB.set('events', events);
+  closeModal('event'); renderEvents(); toast('事件已儲存 ✓');
+}
+
+function saveClient() {
+  const name = document.getElementById('client-name').value.trim();
+  if (!name) { alert('請輸入姓名'); return; }
+  const clients = DB.get('clients');
+  const editId = parseInt(document.getElementById('client-edit-id').value);
+  const matterId = parseInt(document.getElementById('client-matter').value)||null;
+  const data = {
+    name, phone: document.getElementById('client-phone').value,
+    email: document.getElementById('client-email').value,
+    matterId, notes: document.getElementById('client-notes').value
+  };
+  if (editId) {
+    const i = clients.findIndex(c=>c.id===editId);
+    if (i>=0) clients[i] = { ...clients[i], ...data };
+  } else {
+    clients.push({ id: DB.nextId(clients), ...data });
+  }
+  DB.set('clients', clients);
+  closeModal('client'); renderClients(); toast('客戶已儲存 ✓');
+}
+
+function saveKnowledge() {
+  const title = document.getElementById('knowledge-title').value.trim();
+  if (!title) { alert('請輸入主題'); return; }
+  const items = DB.get('knowledge');
+  const editId = parseInt(document.getElementById('knowledge-edit-id').value);
+  const data = {
+    title, domain: document.getElementById('knowledge-domain').value,
+    summary: document.getElementById('knowledge-summary').value,
+    refs: document.getElementById('knowledge-refs').value,
+    updated: new Date().toISOString().slice(0,10)
+  };
+  if (editId) {
+    const i = items.findIndex(k=>k.id===editId);
+    if (i>=0) items[i] = { ...items[i], ...data };
+  } else {
+    items.push({ id: DB.nextId(items), ...data });
+  }
+  DB.set('knowledge', items);
+  closeModal('knowledge'); renderKnowledge(); toast('筆記已儲存 ✓');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+seedData();
+renderDashboard();
+</script>
+</body>
+</html>
