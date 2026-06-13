@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# PDF（大檔不納入版控）
+*.pdf
+
+# Editor
+.vscode/
+*.swp
+
+# Node (if added later)
+node_modules/
